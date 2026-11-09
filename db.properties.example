@@ -1,0 +1,8 @@
+# Modelo do arquivo de configuracao do banco.
+# 1) Copie este arquivo com o nome db.properties (na pasta raiz do projeto).
+# 2) Preencha com os seus dados locais.
+# O db.properties NUNCA vai para o Git. So este .example fica no repositorio.
+
+db.url=jdbc:mysql://localhost:3306/loja_pneus?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Sao_Paulo
+db.user=root
+db.password=SUA_SENHA_AQUI

@@ -1,0 +1,126 @@
+classDiagram
+direction TB
+
+class Cliente {
+  -int id
+  -String nome
+  -String email
+  -String telefone
+  -String endereco
+  +Cliente(nome, email, telefone, endereco)
+  +Cliente(id, nome, email, telefone, endereco)
+  +getters e setters()
+  +toString() String
+}
+class Pneu {
+  -int id
+  -String marca
+  -String modelo
+  -int aro
+  -int estoque
+  -BigDecimal preco
+  +Pneu(marca, modelo, aro, estoque, preco)
+  +Pneu(id, marca, modelo, aro, estoque, preco)
+  +getters e setters()
+  +toString() String
+}
+class Venda {
+  -int id
+  -int quantidade
+  -BigDecimal precoUnitario
+  -LocalDateTime dataVenda
+  +Venda(cliente, pneu, quantidade, precoUnitario, dataVenda)
+  +Venda(id, cliente, pneu, quantidade, precoUnitario, dataVenda)
+  +getters e setters()
+  +getValorTotal() BigDecimal
+  +toString() String
+}
+Venda "*" --> "1" Cliente : cliente
+Venda "*" --> "1" Pneu : pneu
+
+class ClienteDAO {
+  <<interface>>
+  +inserir(Cliente) void
+  +atualizar(Cliente) void
+  +excluir(int) void
+  +buscarPorId(int) Cliente
+  +listar(String, ClienteOrdem, ClienteOrdem) List~Cliente~
+}
+class PneuDAO {
+  <<interface>>
+  +inserir(Pneu) void
+  +atualizar(Pneu) void
+  +excluir(int) void
+  +buscarPorId(int) Pneu
+  +listar(String, PneuOrdem, PneuOrdem) List~Pneu~
+}
+class VendaDAO {
+  <<interface>>
+  +registrar(Venda) void
+  +excluir(int) void
+  +buscarPorId(int) Venda
+  +listar(String, LocalDate, LocalDate, VendaOrdem, VendaOrdem) List~Venda~
+}
+class ClienteDAOJdbc
+class PneuDAOJdbc
+class VendaDAOJdbc
+ClienteDAO <|.. ClienteDAOJdbc
+PneuDAO <|.. PneuDAOJdbc
+VendaDAO <|.. VendaDAOJdbc
+
+class ClienteOrdem {
+  <<enumeration>>
+  NOME_ASC
+  NOME_DESC
+  EMAIL_ASC
+  EMAIL_DESC
+}
+class PneuOrdem {
+  <<enumeration>>
+  MARCA_ASC
+  MARCA_DESC
+  MODELO_ASC
+  MODELO_DESC
+  ARO_ASC
+  ARO_DESC
+  PRECO_ASC
+  PRECO_DESC
+  ESTOQUE_ASC
+  ESTOQUE_DESC
+}
+class VendaOrdem {
+  <<enumeration>>
+  DATA_ASC
+  DATA_DESC
+  TOTAL_ASC
+  TOTAL_DESC
+  CLIENTE_ASC
+  CLIENTE_DESC
+}
+ClienteDAO ..> ClienteOrdem : usa
+PneuDAO ..> PneuOrdem : usa
+VendaDAO ..> VendaOrdem : usa
+ClienteDAO ..> Cliente : usa
+PneuDAO ..> Pneu : usa
+VendaDAO ..> Venda : usa
+
+class ConnectionFactory {
+  -String ARQUIVO_CONFIG$
+  -Properties config$
+  +getConnection() Connection$
+  -carregarConfig() Properties$
+}
+ClienteDAOJdbc ..> ConnectionFactory : usa
+PneuDAOJdbc ..> ConnectionFactory : usa
+VendaDAOJdbc ..> ConnectionFactory : usa
+
+class PersistenciaException {
+  +int ESTOQUE_INSUFICIENTE$
+  -int codigoErro
+  +PersistenciaException(mensagem, codigoErro, causa)
+  +getCodigoErro() int
+}
+PersistenciaException --|> Exception
+ClienteDAO ..> PersistenciaException : lança
+PneuDAO ..> PersistenciaException : lança
+VendaDAO ..> PersistenciaException : lança
